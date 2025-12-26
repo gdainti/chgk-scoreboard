@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chgk scoreboard</title>
+    <style>
+        :root {
+            --blue-color: #0000FF;
+            --white-color: #FFFFFF;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .scoreboard {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .panel {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .score {
+            font-size: 100vh;
+            font-weight: bold;
+            line-height: 1;
+            text-align: center;
+            user-select: none;
+        }
+
+        .panel.left {
+            background-color: var(--white-color);
+        }
+
+        .panel.left .score {
+            color: var(--blue-color);
+        }
+
+        .panel.right {
+            background-color: var(--blue-color);
+        }
+
+        .panel.right .score {
+            color: var(--white-color);
+        }
+
+        .corner-trigger {
+            position: absolute;
+            width: 10vw;
+            height: 10vh;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .top-left {
+            top: 0;
+            left: 0;
+        }
+
+        .bottom-left {
+            bottom: 0;
+            left: 0;
+        }
+
+        .top-right {
+            top: 0;
+            right: 0;
+        }
+
+        .bottom-right {
+            bottom: 0;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scoreboard">
+        <div class="panel left">
+            <div id="left-score" class="score">0</div>
+        </div>
+        <div class="panel right">
+            <div id="right-score" class="score">0</div>
+        </div>
+    </div>
+
+    <div id="top-left-trigger" class="corner-trigger top-left"></div>
+    <div id="bottom-left-trigger" class="corner-trigger bottom-left"></div>
+    <div id="top-right-trigger" class="corner-trigger top-right"></div>
+    <div id="bottom-right-trigger" class="corner-trigger bottom-right"></div>
+
+    <script>
+        const leftScoreElement = document.getElementById('left-score');
+        const rightScoreElement = document.getElementById('right-score');
+
+        const topLeftTrigger = document.getElementById('top-left-trigger');
+        const bottomLeftTrigger = document.getElementById('bottom-left-trigger');
+        const topRightTrigger = document.getElementById('top-right-trigger');
+        const bottomRightTrigger = document.getElementById('bottom-right-trigger');
+
+        let leftScore = 0;
+        let rightScore = 0;
+
+        const PADDING_FACTOR = 0.9;
+
+        function adjustFontSize(scoreElement) {
+            scoreElement.style.fontSize = '';
+
+            const containerWidth = scoreElement.parentElement.clientWidth;
+            const currentFontSize = window.innerHeight;
+            const textWidth = scoreElement.scrollWidth;
+            const availableWidth = containerWidth * PADDING_FACTOR;
+
+            if (textWidth > availableWidth) {
+                const newFontSize = (currentFontSize * availableWidth) / textWidth;
+                scoreElement.style.fontSize = newFontSize + 'px';
+            }
+        }
+
+        function updateScores() {
+            leftScoreElement.textContent = leftScore;
+            rightScoreElement.textContent = rightScore;
+            adjustFontSize(leftScoreElement);
+            adjustFontSize(rightScoreElement);
+        }
+
+        window.addEventListener('resize', updateScores);
+
+        topLeftTrigger.addEventListener('click', () => {
+            leftScore++;
+            updateScores();
+        });
+
+        bottomLeftTrigger.addEventListener('click', () => {
+            leftScore = Math.max(0, leftScore - 1);
+            updateScores();
+        });
+
+        topRightTrigger.addEventListener('click', () => {
+            rightScore++;
+            updateScores();
+        });
+
+        bottomRightTrigger.addEventListener('click', () => {
+            rightScore = Math.max(0, rightScore - 1);
+            updateScores();
+        });
+
+        updateScores();
+    </script>
+</body>
+
+</html>
