@@ -4,7 +4,7 @@ A simple scoreboard inspired by retro TV game show "Что? Где? Когда?"
 
 ## Demo
 
-A live demo is available here: [https://gdainti.com/chgk-scoreboard/](https://gdainti.com/chgk-scoreboard/)
+A live demo is available here: [https://gdainti.com/chgk-score/](https://gdainti.com/chgk-score/)
 
 ## How to Use
 
