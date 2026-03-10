@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,15 +21,13 @@
         gtag('js', new Date());
         gtag('config', 'G-F95N2TK4CC');
     </script>
-
     <style>
         :root {
             --blue-color: #3c83e4;
             --white-color: #fffefe;
         }
 
-        html,
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -51,136 +48,74 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            position: relative;
         }
 
         .score {
-            font-size: 100vh;
+            font-size: 80vh;
             font-weight: bold;
-            line-height: 1;
             text-align: center;
-            user-select: none;
+            user-select: none;            
+            line-height: 0;            
+            margin-top: 0.15em; 
         }
 
-        .panel.left {
-            background-color: var(--white-color);
-        }
+        .panel.left { background-color: var(--white-color); }
+        .panel.left .score { color: var(--blue-color); }
 
-        .panel.left .score {
-            color: var(--blue-color);
-        }
-
-        .panel.right {
-            background-color: var(--blue-color);
-        }
-
-        .panel.right .score {
-            color: var(--white-color);
-        }
+        .panel.right { background-color: var(--blue-color); }
+        .panel.right .score { color: var(--white-color); }
 
         .corner-trigger {
             position: absolute;
-            width: 40vw;
-            height: 40vh;
+            width: 100%;
+            height: 50%;
             cursor: pointer;
             z-index: 10;
         }
-
-        .top-left {
-            top: 0;
-            left: 0;
-        }
-
-        .bottom-left {
-            bottom: 0;
-            left: 0;
-        }
-
-        .top-right {
-            top: 0;
-            right: 0;
-        }
-
-        .bottom-right {
-            bottom: 0;
-            right: 0;
-        }
+        .top { top: 0; }
+        .bottom { bottom: 0; }
     </style>
 </head>
-
 <body>
     <div class="scoreboard">
         <div class="panel left">
             <div id="left-score" class="score">0</div>
+            <div id="top-left-trigger" class="corner-trigger top"></div>
+            <div id="bottom-left-trigger" class="corner-trigger bottom"></div>
         </div>
         <div class="panel right">
             <div id="right-score" class="score">0</div>
+            <div id="top-right-trigger" class="corner-trigger top"></div>
+            <div id="bottom-right-trigger" class="corner-trigger bottom"></div>
         </div>
     </div>
-
-    <div id="top-left-trigger" class="corner-trigger top-left"></div>
-    <div id="bottom-left-trigger" class="corner-trigger bottom-left"></div>
-    <div id="top-right-trigger" class="corner-trigger top-right"></div>
-    <div id="bottom-right-trigger" class="corner-trigger bottom-right"></div>
 
     <script>
         const leftScoreElement = document.getElementById('left-score');
         const rightScoreElement = document.getElementById('right-score');
 
-        const topLeftTrigger = document.getElementById('top-left-trigger');
-        const bottomLeftTrigger = document.getElementById('bottom-left-trigger');
-        const topRightTrigger = document.getElementById('top-right-trigger');
-        const bottomRightTrigger = document.getElementById('bottom-right-trigger');
-
         let leftScore = 0;
         let rightScore = 0;
-
-        const PADDING_FACTOR = 0.9;
-
-        function adjustFontSize(scoreElement) {
-            scoreElement.style.fontSize = '';
-
-            const containerWidth = scoreElement.parentElement.clientWidth;
-            const currentFontSize = window.innerHeight;
-            const textWidth = scoreElement.scrollWidth;
-            const availableWidth = containerWidth * PADDING_FACTOR;
-
-            if (textWidth > availableWidth) {
-                const newFontSize = (currentFontSize * availableWidth) / textWidth;
-                scoreElement.style.fontSize = newFontSize + 'px';
-            }
-        }
 
         function updateScores() {
             leftScoreElement.textContent = leftScore;
             rightScoreElement.textContent = rightScore;
-            adjustFontSize(leftScoreElement);
-            adjustFontSize(rightScoreElement);
+
+            const len = Math.max(leftScore.toString().length, rightScore.toString().length);
+            const baseSize = 80; // vh
+            const newSize = len > 1 ? (baseSize / (len * 0.8)) : baseSize;
+            
+            leftScoreElement.style.fontSize = newSize + 'vh';
+            rightScoreElement.style.fontSize = newSize + 'vh';
         }
 
-        window.addEventListener('resize', updateScores);
-
-        topLeftTrigger.addEventListener('click', () => {
-            leftScore++;
-            updateScores();
-        });
-
-        bottomLeftTrigger.addEventListener('click', () => {
-            leftScore = Math.max(0, leftScore - 1);
-            updateScores();
-        });
-
-        topRightTrigger.addEventListener('click', () => {
-            rightScore++;
-            updateScores();
-        });
-
-        bottomRightTrigger.addEventListener('click', () => {
-            rightScore = Math.max(0, rightScore - 1);
-            updateScores();
-        });
+        document.getElementById('top-left-trigger').onclick = () => { leftScore++; updateScores(); };
+        document.getElementById('bottom-left-trigger').onclick = () => { leftScore = Math.max(0, leftScore - 1); updateScores(); };
+        document.getElementById('top-right-trigger').onclick = () => { rightScore++; updateScores(); };
+        document.getElementById('bottom-right-trigger').onclick = () => { rightScore = Math.max(0, rightScore - 1); updateScores(); };
 
         updateScores();
     </script>
 </body>
-
 </html>
